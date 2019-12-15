@@ -5,7 +5,7 @@
 #'  @ indf=PCA results
 #'#####################################################
 
-conv_hull1<-function(indf,resp,bufsize =  0.1){
+conv_hull<-function(indf,resp,bufsize =  0.1){
   # create prediction dataframe
   indf[,c("PC1","PC2")]->tmp
   raster(xmn=min(tmp$PC1),xmx=max(tmp$PC1),
