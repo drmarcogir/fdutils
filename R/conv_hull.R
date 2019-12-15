@@ -5,19 +5,19 @@
 #'  @ indf=PCA results
 #'#####################################################
 
-conv_hull<-function(indf,resp,bufsize =  0.1){
-  # fit gam
-  as.formula(paste0(resp,"~s(","PC1,PC2)"))->form
-  mod<-gam(form,data = resdf)
-  b <- getViz(mod)
-  plot(sm(b, 1)) + l_fitRaster()+ l_fitContour()->plot
-  as_tibble(plot$data$fit) %>%
-    dplyr::select(x,y) %>%
-    rename(PC1 = x, PC2 = y)  %>%
-    mutate(cat = 1:length(PC1))->preddf
+conv_hull1<-function(indf,resp,bufsize =  0.1){
+  # create prediction dataframe
+  indf[,c("PC1","PC2")]->tmp
+  raster(xmn=min(tmp$PC1),xmx=max(tmp$PC1),
+         ymn=min(tmp$PC2),ymx=max(tmp$PC2),res=0.25)->tmpr
+  as_tibble(coordinates(tmpr)) %>%
+    mutate(cat = 1:length(x)) %>% {.->>tmp1} %>%
+    rasterFromXYZ()->gridr
   # fit lm
   as.formula(paste0(resp,"~PC1+PC2"))->form1
   mod<-lm(form1,data = resdf)
+  tmp1%>%
+    rename(PC1 =x, PC2 =y) -> preddf
   preddf %>%
     mutate(fit = predict(mod,preddf)) ->preddf1
   # convex hull from PCA points
