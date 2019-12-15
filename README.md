@@ -1,8 +1,7 @@
 # fdutils
 *Marco Girardello* (marco.girardello@gmail.com) 
 
-A number of self-written functions that use regularly - mostly for handling spatial data, the extraction of specific information from dataframes, and calculating goodness of fit metrics for linear models.
-
+This package contains a number of wrapper functions useful for analysing changes in functional diversity.
 
 The package can be installed by typing:
 
