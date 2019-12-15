@@ -1,14 +1,14 @@
-######################################################################
+########################################################
 #'  @ Calculate convex hull around PCA scores
 #'  @ Created by Marco Girardello 15/12/2019
 #'  @ The function takes the following arguments:
 #'  @ indf=PCA results
-#'####################################################################
+#'#####################################################
 
 conv_hull<-function(indf,resp,bufsize =  0.1){
   # fit gam
   as.formula(paste0(resp,"~s(","PC1,PC2)"))->form
-  mod<-gam(form,data = resdf)  
+  mod<-gam(form,data = resdf)
   b <- getViz(mod)
   plot(sm(b, 1)) + l_fitRaster()+ l_fitContour()->plot
   as_tibble(plot$data$fit) %>%
