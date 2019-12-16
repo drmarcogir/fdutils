@@ -14,7 +14,7 @@ funique_calc<-function(intrait,ingeo){
   # distance matrix
   traits3<-as.matrix(traits2[2:11])
   row.names(traits3)<-traits2$Species
-  dist_mat = compute_dist_matrix(traits3)
+  dist_mat = compute_dist_matrix(traits3,metric = "euclidean")
   # distinctivness
   reg_di = distinctiveness(reg_pool,dist_mat)
   as.data.frame(reg_di) %>%
