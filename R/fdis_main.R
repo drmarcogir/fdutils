@@ -27,8 +27,8 @@ fdis_main<-function(x,indist){
   fdisp(d = diss , a = as.matrix(spdat2))->fdis_pa
   # combine everything together into 1 tibble
   tibble(x=spdat1$x, y = spdat1$y,fdis = fdis_pa$FDis) %>%
-    inner_join(spdat %>% dplyr::select(x,y)) %>%
-    #right_join(spdat %>% dplyr::select(x,y)) %>%
+    #inner_join(spdat %>% dplyr::select(x,y)) %>%
+    right_join(spdat %>% dplyr::select(x,y)) %>%
     mutate(fdis = ifelse(is.na(fdis),0,fdis))->fd_res
   # calculate species richness
   spdat %>%
