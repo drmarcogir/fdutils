@@ -6,10 +6,10 @@
 #'  @ x=matrix of abundances
 #'####################################################################
 
-fdis_main<-function(x,indist){
+fdis_main<-function(x,intrait){
   # extract only species found in trait matrix
   x %>%
-    dplyr::select(intersect(names(.), c(traits$Species,"x","y")))->spdat
+    dplyr::select(intersect(names(.), c(intrait$Species,"x","y")))->spdat
   # exclude cells with 0 species
   spdat %>%
     gather(key="species",value="pa",-c(x,y)) %>%
@@ -23,11 +23,23 @@ fdis_main<-function(x,indist){
     ungroup() %>%
     dplyr::select(-c(x,y)) %>%
     as.data.frame() ->spdat2
+  # dissimilarity matrix
+  intrait %>%
+    filter(Species %in% names(spdat2)) ->tmp
+  tmp %>%
+  gather(key = "trait_name", value = "trait_value",-c(Species)) %>%
+    #inner_join(frisksp) %>%
+    group_by(trait_name) %>%
+    mutate(trait_value=as.numeric(scale(log(trait_value)))) %>%
+    spread(key = "trait_name", value = "trait_value") ->tmp1
+  as.matrix(tmp1[2:11])->traits1
+  rownames(traits1)<-tmp$Species
+  dist(traits1)->diss
   # calculate functional dispersion
   fdisp(d = diss , a = as.matrix(spdat2))->fdis_pa
   # combine everything together into 1 tibble
   tibble(x=spdat1$x, y = spdat1$y,fdis = fdis_pa$FDis) %>%
-    #inner_join(spdat %>% dplyr::select(x,y)) %>%
+    #inner_join(spdat %>% dplyr::select(x,y))->fd_res1
     right_join(spdat %>% dplyr::select(x,y)) %>%
     mutate(fdis = ifelse(is.na(fdis),0,fdis))->fd_res
   # calculate species richness
