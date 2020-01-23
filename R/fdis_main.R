@@ -32,7 +32,7 @@ fdis_main<-function(x,intrait){
     group_by(trait_name) %>%
     mutate(trait_value=as.numeric(scale(log(trait_value)))) %>%
     spread(key = "trait_name", value = "trait_value") ->tmp1
-  as.matrix(tmp1[2:11])->traits1
+  as.matrix(tmp1[2:dim(tmp1)[2]])->traits1
   rownames(traits1)<-tmp$Species
   dist(traits1)->diss
   # calculate functional dispersion
